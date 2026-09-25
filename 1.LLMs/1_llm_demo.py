@@ -1,12 +1,15 @@
-from langchain_huggingface import HuggingFaceEmbeddings
+import os
+from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
 
 load_dotenv()
 
-embedding = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/all-MiniLM-L6-v2"
+llm = ChatOpenAI(
+    model=os.getenv("PRIMARY_MODEL"),
+    api_key=os.getenv("AWS_BEARER_TOKEN_BEDROCK"),
+    base_url=os.getenv("BEDROCK_BASE_URL")
 )
 
-result = embedding.embed_query("Delhi is the capital of India")
+result = llm.invoke("What is the capital of India?")
 
-print(str(result))
+print(result.content)
